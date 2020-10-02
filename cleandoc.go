@@ -55,7 +55,7 @@ func replacePlaceholdersByCleanVersion(replacements map[string]string, content s
 }
 
 func findContainingXmlBlockForMacro(text string) []string {
-	blocks := regexp.MustCompile(`(?i)<w:r.*?</w:r>`)
+	blocks := regexp.MustCompile(`(?i)<w:r[ >].*?</w:r>`)
 	macros := regexp.MustCompile(`{{.*?}}`)
 	var result []string
 	for _, b := range blocks.FindAllString(text, -1) {
@@ -70,7 +70,7 @@ func splitTextIntoTexts(text string) string {
 	if !textNeedsSplitting(text) {
 		return text
 	}
-	extractedStyles := regexp.MustCompile(`(?i)<w:rPr.*</w:rPr>`)
+	extractedStyles := regexp.MustCompile(`(?i)<w:rPr.*?</w:rPr>`)
 	styleMatches := extractedStyles.FindAllString(text, -1)
 	var style string
 	if len(styleMatches) > 0 {
@@ -81,8 +81,8 @@ func splitTextIntoTexts(text string) string {
 	result := strings.ReplaceAll(nonformattedText, `{{`, fmt.Sprintf("</w:t></w:r><w:r>%s<w:t xml:space=\"preserve\">{{", style))
 	result = strings.ReplaceAll(result, `}}`, fmt.Sprintf("}}</w:t></w:r><w:r>%s<w:t xml:space=\"preserve\">", style))
 	result = strings.ReplaceAll(result, fmt.Sprintf("<w:r>%s<w:t xml:space=\"preserve\"></w:t></w:r>",style), "")
-	result = strings.ReplaceAll(result, "<w:r><w:t xml:space=\"preserve\"></w:t></w:r>", "<w:t xml:space=\"preserve\">")
-	result = strings.ReplaceAll(result, "<w:t>", "")
+	result = strings.ReplaceAll(result, "<w:r><w:t xml:space=\"preserve\"></w:t></w:r>", "")
+	result = strings.ReplaceAll(result, "<w:t>", "<w:t xml:space=\"preserve\">")
 
 	return result
 }

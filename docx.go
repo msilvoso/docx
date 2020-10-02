@@ -3,9 +3,9 @@ package docx
 import (
 	"archive/zip"
 	"bytes"
+	"html/template"
 	"io/ioutil"
 	"strings"
-	"text/template"
 )
 
 type Docx struct {
