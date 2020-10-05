@@ -3,18 +3,18 @@ package docx
 import (
 	"archive/zip"
 	"bytes"
-	"html/template"
 	"io/ioutil"
 	"strings"
+	"text/template"
 )
 
 type Docx struct {
-	ref *zip.ReadCloser
+	ref      *zip.ReadCloser
 	document string
-	headers	 []string
-	footers	 []string
+	headers  []string
+	footers  []string
 	replaced string
-	result []byte
+	result   []byte
 }
 
 // load the docx file an extract the document.xml file

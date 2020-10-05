@@ -11,7 +11,7 @@ func TestDocx_CreateNewDocx(t *testing.T) {
 	var doc Docx
 	check := "\nI like to move itI like to move it, move itI like to move it, move itya like to move itI like to move it, move itI like to move itI like to move it, move itya like to move itI like to move it, move itI like to move itI like to move it, move itYa like to move itI like to move it, move itI like to move itI like to move it, move itya like to move itAll girls all over the worldOriginal Mad Stuntman pon' ya case manI love how all girls a move them bodyAnd when ya move ya bodyGonna move it nice and sweet and sexy, alright?Woman ya cute and you don't need no make upOriginal cute body you a mek man mud upWoman ya cute and you don't need no make upOriginal cute body you a mek man mud upWomanMan physically fit, physically fitPhysically, physically, physicallyWoman, physically fit, physically fitPhysically, physically, physicallyWomanMan WomanMan, ya nice, sweet, fantasticBig ship 'pon di ocean that a big TitanicC'mon, ya nice, sweet, I enjoy the thingBig ship 'pon di ocean that a big TitanicWoman, ya nice, sweet, fantasticBig ship 'pon di ocean that a big TitanicC'mon, ya nice, sweet, I enjoy the thingBig ship 'pon di ocean that a big TitanicWomanI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itWoman ya cute and you don't need no make upOriginal cute body you a mek man mud upWoman ya cute and you don't need no make upOriginal cute body you a mek man mud upEyeliner 'pon ya face a mek man mud upNose powder 'pon ya face a mek man mud upPluck ya eyebrow 'pon ya face a mek man mud upGal ya lipstick 'pon ya face a mek man mud upWoman, ya nice, broad faceAnd ya nice hipMake man flip and bust up them lipWoman, ya nice and energeticBig ship 'pon de ocean that a big TitanicWoman, ya nice, broad faceAnd ya nice hipMake man flip and bust up them lipWoman, ya nice and energeticBig ship 'pon de ocean that a big TitanicWomanI like to move itI like to move it, move itI like to move it, move itYa like to move itI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itI like to move it, move itI like to move it, move itI like to move it, move itYa like to move itI like to move itI like to move it, move itI like to move it, move itya like to move it"
 	var testData = map[string]string{
-		"iliketo": "I like to move it",
+		"iliketo":  "I like to move it",
 		"yaliketo": "ya like to move it",
 		"subject":  "Woman",
 		"object":   "Man",
@@ -52,7 +52,6 @@ func TestDocx_CreateNewDocx(t *testing.T) {
 				readCloser.Close()
 			}
 			break
-
 		}
 	}
 }
