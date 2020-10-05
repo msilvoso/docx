@@ -23,7 +23,7 @@ func TestDocx_CreateNewDocx(t *testing.T) {
 	}
 	doc.CreateNewDocx()
 	doc.SaveDocxToFile("/tmp/iliketo.docx")
-	extractedText := extractRawTextFromDocxXml(doc.replaced)
+	extractedText := extractRawTextFromDocxXml(doc.documentPartsReplaced["word/document.xml"])
 	if check != extractedText {
 		t.Error("Error: Text not matching\n\n")
 		t.Error(extractedText)
