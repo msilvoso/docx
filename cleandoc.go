@@ -34,7 +34,7 @@ func findPlaceholdersAndRemoveWordTags(content string) map[string]string {
 	matchRegexes := []string{ // find {{..}}
 		`}<[^{}]*?}`, // clean between first } and second }
 		`{<[^{}]*?{`, // clean between first { and second {
-		`{[^{}]*?}`,   // clean between second { and first }
+		`{[^{}]*?}`,  // clean between second { and first }
 	}
 	for _, matchRegex := range matchRegexes {
 		regex := regexp.MustCompile(matchRegex)
@@ -77,10 +77,10 @@ func splitTextIntoTexts(text string) string {
 		style = styleMatches[0]
 	}
 	nonformatted := regexp.MustCompile(`>\s+<`)
-	nonformattedText := nonformatted.ReplaceAllString(text,`><`)
+	nonformattedText := nonformatted.ReplaceAllString(text, `><`)
 	result := strings.ReplaceAll(nonformattedText, `{{`, fmt.Sprintf("</w:t></w:r><w:r>%s<w:t xml:space=\"preserve\">{{", style))
 	result = strings.ReplaceAll(result, `}}`, fmt.Sprintf("}}</w:t></w:r><w:r>%s<w:t xml:space=\"preserve\">", style))
-	result = strings.ReplaceAll(result, fmt.Sprintf("<w:r>%s<w:t xml:space=\"preserve\"></w:t></w:r>",style), "")
+	result = strings.ReplaceAll(result, fmt.Sprintf("<w:r>%s<w:t xml:space=\"preserve\"></w:t></w:r>", style), "")
 	result = strings.ReplaceAll(result, "<w:r><w:t xml:space=\"preserve\"></w:t></w:r>", "")
 	result = strings.ReplaceAll(result, "<w:t>", "<w:t xml:space=\"preserve\">")
 

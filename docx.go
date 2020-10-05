@@ -18,9 +18,10 @@ type Docx struct {
 }
 
 // load the docx file an extract the document.xml file
+// TODO: replace file by io.reader?
 func (d *Docx) LoadDocx(path string) error {
 	var err error
-	// Open a zip archive for reading.
+	// docx documents are zip archives
 	d.ref, err = zip.OpenReader(path)
 	if err != nil {
 		return err
@@ -43,7 +44,7 @@ func (d *Docx) LoadDocx(path string) error {
 	return nil
 }
 
-// replace placeholders
+// replace placeholders using the text/template package
 func (d *Docx) Replace(replacements map[string]string) (err error) {
 	buf := strings.Builder{}
 	tmpl, err := template.New("docx").Option("missingkey=zero").Parse(d.document)
@@ -58,6 +59,7 @@ func (d *Docx) Replace(replacements map[string]string) (err error) {
 	return nil
 }
 
+// create the resulting docx and store the byte slice to result
 func (d *Docx) CreateNewDocx() error {
 	buf := new(bytes.Buffer)
 	w := zip.NewWriter(buf)
@@ -86,11 +88,13 @@ func (d *Docx) CreateNewDocx() error {
 	return nil
 }
 
+// create the resulting docx, store the byte slice to result and return it
 func (d *Docx) NewDocx() []byte {
 	d.CreateNewDocx()
 	return d.result
 }
 
+// Save the resulting docx to a file
 func (d *Docx) SaveDocxToFile(path string) error {
 	return ioutil.WriteFile(path, d.result, 0644)
 }
