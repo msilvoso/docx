@@ -13,6 +13,8 @@ import (
 )
 
 func main() {
+    // Docx with "{{.placeholder1}} {{.placeholder2}}{{.placeholder3}}"
+    // becomes "Hello World!"
     replacements := map[string]string {
         "placeholder1": "Hello",
         "placeholder2": "World",
@@ -34,10 +36,3 @@ func main() {
     d.Close()
 }
 ```
-*{{.placeholder1}} {{.placeholder2}}{{.placeholder3}}*
-
-becomes
-
-*Hello World!*
-
-in the word docx file
