@@ -17,6 +17,13 @@ type Docx struct {
 	result                []byte
 }
 
+func New(path string) (Docx, error) {
+	d := Docx{}
+	err := d.LoadDocx(path)
+
+	return d, err
+}
+
 // load the docx file an extract the document.xml file
 // TODO: replace file by io.reader?
 func (d *Docx) LoadDocx(path string) error {
@@ -107,6 +114,7 @@ func (d *Docx) NewDocx() []byte {
 
 // Save the resulting docx to a file
 func (d *Docx) SaveDocxToFile(path string) error {
+	d.CreateNewDocx()
 	return ioutil.WriteFile(path, d.result, 0644)
 }
 
