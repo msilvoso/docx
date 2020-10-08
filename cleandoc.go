@@ -18,10 +18,6 @@ func cleanDocXml(content string) string {
 		blocks[s] = splitTextIntoTexts(s)
 	}
 	processedContent := replacePlaceholdersByCleanVersion(blocks, cleanContent)
-	// From: https://github.com/PHPOffice/PHPWord/issues/590
-	// $this->tempDocumentMainPart = preg_replace('/(<w:t*)>/', '$1 xml:space="preserve">', $this->tempDocumentMainPart);
-	//preserveSpaces := regexp.MustCompile("(<w:t*?)>")
-	//cleanContent = preserveSpaces.ReplaceAllString(cleanContent, `$1 xml:space="preserve">`)
 
 	return processedContent
 }
@@ -30,7 +26,6 @@ func findPlaceholdersAndRemoveWordTags(content string) map[string]string {
 	var cleanRegex = regexp.MustCompile("<.*?>")
 
 	replacements := make(map[string]string)
-	// matchRegexes := []string{`\{(\{|[^{]*\>)\{[^}]*\}(\}|[^{}]*\>)\}`} // find {{..}}
 	matchRegexes := []string{ // find {{..}}
 		`}<[^{}]*?}`, // clean between first } and second }
 		`{<[^{}]*?{`, // clean between first { and second {
@@ -41,7 +36,7 @@ func findPlaceholdersAndRemoveWordTags(content string) map[string]string {
 		matches := regex.FindAllString(content, -1)
 		for _, match := range matches {
 			cleanString := cleanRegex.ReplaceAllString(match, "")
-			replacements[match] = fmt.Sprintf("%s", cleanString) // remplace {...} by {{...}}
+			replacements[match] = fmt.Sprintf("%s", cleanString)
 		}
 	}
 	return replacements
