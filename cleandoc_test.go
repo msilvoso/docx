@@ -18,7 +18,7 @@ func Test_splitTextIntoTexts(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got, _ := splitTextIntoTexts(tt.args.text); got != tt.want {
+			if got := splitTextIntoTexts(tt.args.text); got != tt.want {
 				t.Errorf("splitTextIntoTexts() = \n%v\n, want \n%v\n", got, tt.want)
 			}
 		})

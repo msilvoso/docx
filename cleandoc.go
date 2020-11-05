@@ -25,10 +25,8 @@ func cleanDocXml(content string) string {
 	cleanContent := findPlaceholdersAndRemoveWordTags(content)
 
 	for _, find := range findContainingXmlBlockForMacro(cleanContent) {
-		replace, replaced := splitTextIntoTexts(find)
-		if replaced {
-			cleanContent = strings.ReplaceAll(cleanContent, find, replace)
-		}
+		replace := splitTextIntoTexts(find)
+		cleanContent = strings.ReplaceAll(cleanContent, find, replace)
 	}
 	return cleanContent
 }
@@ -68,9 +66,9 @@ func findContainingXmlBlockForMacro(text string) []string {
 // and adds xml:space="preserve" in case the replacement contains spaces
 // See https://github.com/PHPOffice/PHPWord/issues/590
 // returns "true" as second value when something needs replacing
-func splitTextIntoTexts(text string) (string, bool) {
+func splitTextIntoTexts(text string) string {
 	if !needsSplittingRegexp.MatchString(text) {
-		return text, false
+		return text
 	}
 	extractedStyles := regexp.MustCompile(`(?i)<w:rPr.*?</w:rPr>`)
 	styleMatches := extractedStyles.FindAllString(text, -1)
@@ -86,5 +84,5 @@ func splitTextIntoTexts(text string) (string, bool) {
 	result = strings.ReplaceAll(result, "<w:r><w:t xml:space=\"preserve\"></w:t></w:r>", "")
 	result = strings.ReplaceAll(result, "<w:t>", "<w:t xml:space=\"preserve\">")
 
-	return result, true
+	return result
 }
