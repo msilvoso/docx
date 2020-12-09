@@ -19,8 +19,8 @@ type Docx struct {
 }
 
 type Replacement struct {
-	replacement string
-	escaped     bool
+	ReplacementValue string
+	Escaped          bool
 }
 
 func New(path string) (Docx, error) {
@@ -102,16 +102,16 @@ func (d *Docx) ReplaceSafeCond(replacements map[string]Replacement) (err error){
 	repls := map[string]string{}
 	// transform not safe caracters to entities when desired
 	for k, v := range replacements {
-		if v.escaped {
+		if v.Escaped {
 			buf := new(bytes.Buffer)
-			err := xml.EscapeText(buf, []byte(v.replacement))
+			err := xml.EscapeText(buf, []byte(v.ReplacementValue))
 			if err != nil {
 				return err
 			}
 			repls[k] = buf.String()
 			continue
 		}
-		repls[k] = v.replacement
+		repls[k] = v.ReplacementValue
 	}
 	return d.Replace(repls)
 }
