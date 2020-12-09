@@ -3,6 +3,7 @@ package docx
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/xml"
 	"fmt"
 	"io/ioutil"
 	"regexp"
@@ -15,6 +16,11 @@ type Docx struct {
 	documentParts         map[string]string
 	documentPartsReplaced map[string]string
 	result                []byte
+}
+
+type Replacement struct {
+	replacement string
+	escaped     bool
 }
 
 func New(path string) (Docx, error) {
@@ -58,6 +64,8 @@ zipFileIter:
 }
 
 // replace placeholders using the text/template package
+// be sure to escape (xml entities) the contents of the string map as html/template would not work here
+// furthermore I find it useful to inject some docx xml tags
 func (d *Docx) Replace(replacements map[string]string) (err error) {
 	d.documentPartsReplaced = map[string]string{}
 	for name, content := range d.documentParts {
@@ -73,6 +81,39 @@ func (d *Docx) Replace(replacements map[string]string) (err error) {
 		d.documentPartsReplaced[name] = buf.String()
 	}
 	return nil
+}
+
+// replace placeholders using the text/template package
+// this function does the escaping for you using html/template
+func (d *Docx) ReplaceSafe(replacements map[string]string) (err error) {
+	repls := map[string]string{}
+	// transform not safe caracters to entities
+	for k, v := range replacements {
+		buf := new(bytes.Buffer)
+		xml.EscapeText(buf, []byte(v))
+		repls[k] = buf.String()
+	}
+	return d.Replace(repls)
+}
+
+// ReplaceSafeCond replaces replaces the placeholders like the other two replacement functions
+// but provides the possibility to choose (with the escaped field) whether the string should be escaped
+func (d *Docx) ReplaceSafeCond(replacements map[string]Replacement) (err error){
+	repls := map[string]string{}
+	// transform not safe caracters to entities when desired
+	for k, v := range replacements {
+		if v.escaped {
+			buf := new(bytes.Buffer)
+			err := xml.EscapeText(buf, []byte(v.replacement))
+			if err != nil {
+				return err
+			}
+			repls[k] = buf.String()
+			continue
+		}
+		repls[k] = v.replacement
+	}
+	return d.Replace(repls)
 }
 
 // create the resulting docx and store the byte slice to result
