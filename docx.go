@@ -66,7 +66,7 @@ zipFileIter:
 // replace placeholders using the text/template package
 // be sure to escape (xml entities) the contents of the string map as html/template would not work here
 // furthermore I find it useful to inject some docx xml tags
-func (d *Docx) Replace(replacements map[string]string) (err error) {
+func (d *Docx) replace(replacements map[string]string) (err error) {
 	d.documentPartsReplaced = map[string]string{}
 	for name, content := range d.documentParts {
 		buf := strings.Builder{}
@@ -85,7 +85,7 @@ func (d *Docx) Replace(replacements map[string]string) (err error) {
 
 // replace placeholders using the text/template package
 // this function does the escaping for you using html/template
-func (d *Docx) ReplaceSafe(replacements map[string]string) (err error) {
+func (d *Docx) Replace(replacements map[string]string) (err error) {
 	repls := map[string]string{}
 	// transform not safe caracters to entities
 	for k, v := range replacements {
@@ -93,12 +93,12 @@ func (d *Docx) ReplaceSafe(replacements map[string]string) (err error) {
 		xml.EscapeText(buf, []byte(v))
 		repls[k] = buf.String()
 	}
-	return d.Replace(repls)
+	return d.replace(repls)
 }
 
-// ReplaceSafeCond replaces replaces the placeholders like the other two replacement functions
+// ReplaceCond replaces replaces the placeholders like the other two replacement functions
 // but provides the possibility to choose (with the escaped field) whether the string should be escaped
-func (d *Docx) ReplaceSafeCond(replacements map[string]Replacement) (err error){
+func (d *Docx) ReplaceCond(replacements map[string]Replacement) (err error){
 	repls := map[string]string{}
 	// transform not safe caracters to entities when desired
 	for k, v := range replacements {
@@ -113,7 +113,7 @@ func (d *Docx) ReplaceSafeCond(replacements map[string]Replacement) (err error){
 		}
 		repls[k] = v.ReplacementValue
 	}
-	return d.Replace(repls)
+	return d.replace(repls)
 }
 
 // create the resulting docx and store the byte slice to result

@@ -32,9 +32,9 @@ func TestDocx_CreateNewDocx(t *testing.T) {
 		}
 		switch testNb {
 		case 0:
-			err = doc.Replace(testData[0])
+			err = doc.replace(testData[0])
 		case 1:
-			err = doc.ReplaceSafe(testData[1])
+			err = doc.Replace(testData[1])
 		case 2:
 			testDataRepls := map[string]Replacement{}
 			for k, v := range testData[1] {
@@ -44,7 +44,7 @@ func TestDocx_CreateNewDocx(t *testing.T) {
 				}
 				testDataRepls[k] = Replacement{ v, replaced}
 			}
-			err = doc.ReplaceSafeCond(testDataRepls)
+			err = doc.ReplaceCond(testDataRepls)
 		}
 		if err != nil {
 			t.Fatalf("Error: %s\n", err.Error())
